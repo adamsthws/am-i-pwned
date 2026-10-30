@@ -1,0 +1,13 @@
+# Keeps pinned dependencies current. Actions and the Docker base image are pinned
+# to exact hashes; Dependabot opens a pull request when a new version appears.
+# Pre-commit hooks are frozen too; update them with `pre-commit autoupdate --freeze`.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: docker
+    directory: /tools/pwsh
+    schedule:
+      interval: weekly

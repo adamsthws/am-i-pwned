@@ -1,0 +1,2 @@
+# Local dev tooling (tools/dev-setup.sh); never installed outside the repo.
+.venv/

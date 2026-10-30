@@ -1,0 +1,48 @@
+# Set up inside .venv/ (nothing installed on your machine):  bash tools/dev-setup.sh
+# Run on everything:  PRE_COMMIT_HOME=.venv/pre-commit .venv/bin/pre-commit run --all-files
+# Update the frozen revs:  PRE_COMMIT_HOME=.venv/pre-commit .venv/bin/pre-commit autoupdate --freeze
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: cef0300fd0fc4d2a87a85fa2093c6b283ea36f4b  # frozen: v5.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: check-executables-have-shebangs
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: 43fae355e6fe4d99d2a7b240a224b85e2903aeb4  # frozen: v8.21.2
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: a23f6b85d0fdd5bb9d564e2579e678033debbdff  # frozen: v0.10.0.1
+    hooks:
+      - id: shellcheck
+
+  - repo: local
+    hooks:
+      - id: check-repo
+        name: repository layout
+        entry: bash tools/check-repo.sh
+        language: system
+        pass_filenames: false
+      - id: psscriptanalyzer
+        name: PowerShell parse + PSScriptAnalyzer (pwsh or docker)
+        entry: bash tools/psscriptanalyzer.sh
+        language: system
+        files: \.ps1$
+      - id: powershell-smoke
+        name: run-all.ps1 smoke test (docker or pwsh)
+        entry: bash tools/ps-smoke.sh
+        language: system
+        files: (\.ps1|tools/pwsh/Dockerfile)$
+        pass_filenames: false
+      - id: detection-tests
+        name: detection tests (shell)
+        entry: bash tools/run-tests.sh
+        language: system
+        files: \.sh$
+        pass_filenames: false

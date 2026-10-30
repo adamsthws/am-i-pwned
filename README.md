@@ -32,6 +32,10 @@ Each check has its own directory and README with a short summary, the single com
 |---|---|
 | [Claude Code 2.1.313](Claude%20Code%202.1.313/) | Trojanised Claude Code VS Code extension, October 2026 |
 
+## Contributing
+
+New checks are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the expected layout.
+
 ## Licence
 
 [AGPL-3.0](LICENSE)
