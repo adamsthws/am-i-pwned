@@ -1,0 +1,6 @@
+# Left out of release archives (git archive): users only need the checks.
+/.github export-ignore
+/tools export-ignore
+/.pre-commit-config.yaml export-ignore
+/.gitignore export-ignore
+/.gitattributes export-ignore

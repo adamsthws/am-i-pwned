@@ -1,0 +1,31 @@
+name: Release
+
+# Push a tag such as v1.0.0 from main to publish a release. The README's one-line
+# commands download the latest release's archives, so users run a tagged version,
+# never whatever is on main at that moment.
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Publish release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Run detection tests
+        run: bash tools/run-tests.sh
+      - name: Build archives
+        # Names stay fixed so releases/latest/download/<name> always works.
+        run: |
+          git archive --format=tar.gz --prefix=am-i-pwned/ -o am-i-pwned.tar.gz HEAD
+          git archive --format=zip --prefix=am-i-pwned/ -o am-i-pwned.zip HEAD
+          sha256sum am-i-pwned.tar.gz am-i-pwned.zip > SHA256SUMS
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" am-i-pwned.tar.gz am-i-pwned.zip SHA256SUMS --verify-tag --generate-notes
